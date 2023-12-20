@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/weapons/v_sc_adminpistol/v_pistol_sheet"
+	"$bumpmap" "models/weapons/v_pistol/v_pistol_sheet_normal"
+	"$normalmapalphaenvmapmask" 1
+	"$selfillum" "1"
+}

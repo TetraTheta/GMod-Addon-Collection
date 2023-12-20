@@ -1,0 +1,10 @@
+{
+  "title": "SC Commands",
+  "type": "tool",
+  "tags": [
+    "fun"
+  ],
+  "ignore": [
+    "lua/disabled/*"
+  ]
+}
