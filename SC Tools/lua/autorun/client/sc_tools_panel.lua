@@ -10,6 +10,7 @@ function sc_clean_panel(c)
   c:Button("Ragdolls", "sc_clean", "ragdoll")
   c:Button("Small Objects", "sc_clean", "small")
   c:Button("Weapons", "sc_clean", "weapons")
+
   return c
 end
 
@@ -26,6 +27,7 @@ function sc_setspeed_global_panel(c)
   c:Button("Slow Reset", "sc_setspeed", "all", "slow", "reset")
   c:Button("Walk Fast", "sc_setspeed", "all", "walk", "fast")
   c:Button("Walk Reset", "sc_setspeed", "all", "walk", "reset")
+
   return c
 end
 
@@ -36,6 +38,7 @@ function sc_setspeed_player_panel(c)
   for _, v in ipairs(player.GetHumans()) do
     combo:AddChoice(v:Name())
   end
+
   combo:SetValue(LocalPlayer():Name())
   local sel = combo:GetSelected()
   c:Button("All Fast", "sc_setspeed", sel, "all", "fast")
@@ -54,20 +57,32 @@ end
 
 function sc_setting_panel(c)
   c:Help("Adjust ConVar of SC Tools")
-  c:CheckBox("Automatically enable flashlight to all players.", "sc_flashlight_auto")
-  c:CheckBox("Disable player-to-player collision.", "sc_no_player_collision")
   c:CheckBox("Automatically make NPC\nin campaign maps invulnerable.", "sc_auto_god_npc")
   c:CheckBox("Automatically make users\nin 'superadmin' user group invulnerable.", "sc_auto_god_sadmin")
+  c:CheckBox("Show connection message to chat.", "sc_connection_message")
+  c:NumberWang("Automatically enable flashlight to players.\n0 = Disable, 1 = Super Admin Only, 2 = All Players.", "sc_flashlight_auto", 0, 2, 3)
   c:CheckBox("Ignore 'important' flag of NPC", "sc_ignore_important")
+  c:CheckBox("Disable player-to-player collision.", "sc_no_player_collision")
+  c:NumberWang("Entity remove effect type.\n0 = Remove (Remover tool gun effect)\n1 = Dissolve", "sc_remove_effect", 0, 1, 2)
+
   return c
 end
 
-hook.Add("PopulateToolMenu", "sc_tools", function()
-  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_settings", "Settings", "", "", sc_setting_panel, {})
-  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_clean", "Clean", "", "", sc_clean_panel, {})
-  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_global", "Set Speed", "", "", sc_setspeed_global_panel, {})
-  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
-end)
-hook.Add("SpawnMenuOpened", "sc_tools", function()
-  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
-end)
+hook.Add(
+  "PopulateToolMenu",
+  "sc_tools",
+  function()
+    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_settings", "Settings", "", "", sc_setting_panel, {})
+    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_clean", "Clean", "", "", sc_clean_panel, {})
+    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_global", "Set Speed", "", "", sc_setspeed_global_panel, {})
+    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
+  end
+)
+
+hook.Add(
+  "SpawnMenuOpened",
+  "sc_tools",
+  function()
+    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
+  end
+)

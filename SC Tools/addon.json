@@ -5,6 +5,6 @@
     "fun"
   ],
   "ignore": [
-    "lua/disabled/*"
+    "lua/.ignore/*"
   ]
 }

@@ -62,7 +62,7 @@ local function ProcessDamage(victim, dmg)
   -- Set damage to 0 for 'important' entity
   if IsValid(victim.important) and victim.important == true then
     dmg:SetDamage(0)
-    MsgN("[SC God NPC] The NPC (", victim:GetName(), ", ", victim:GetClass(), ") is marked as important. Ignoring damage...")
+    MsgN("[SC God NPC] Target (", victim:GetName(), ", ", victim:GetClass(), ") is marked as important. Ignoring damage...")
 
     return true
   end
@@ -99,7 +99,7 @@ local function SetGodPlayer(ply, cmd, args, str)
   if not CheckSAdminConsole(ply) then return end
   if args[0] ~= nil then
     if args[1] ~= nil then
-      MsgTo("[SC God Player] Only first player will be processed.")
+      SendMessage(ply, HUD_PRINTCONSOLE, "[SC God Player] Only first player will be processed.")
     end
 
     local p = GetPlayerByName(args[0])
@@ -108,10 +108,10 @@ local function SetGodPlayer(ply, cmd, args, str)
       p.important = true
       -- Attempt 2: Set God Mode to the player
       p:GodEnable()
-      MsgTo("[SC God Player] God Mode is enabled to " .. p:GetName() .. ".")
+      SendMessage(ply, HUD_PRINTTALK, "[SC God Player] God Mode is enabled to " .. p:GetName() .. ".")
     end
   else
-    MsgTo("[SC God Player] You must provide one player.")
+    SendMessage(ply, HUD_PRINTCONSOLE, "[SC God Player] You must provide one player.")
   end
 end
 
@@ -143,7 +143,7 @@ local function SetGodSAdmin(ply)
   if not GetConVar("sc_auto_god_sadmin"):GetBool() then return end
   if CheckSAdmin(ply) then
     ply:GodEnable()
-    ply:ChatPrint("[SC Auto God SAdmin] God Mode is automatically activated. You are in God Mode.")
+    ply:ChatPrint("[SC Auto God SAdmin] God Mode is automatically activated to you.")
     MsgN("[SC Auto God SAdmin] Automatically activated God Mode to ", ply:GetName())
   end
 end
