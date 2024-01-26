@@ -105,7 +105,40 @@ end
 
 local function CleanSmall()
   local result = 0
-  -- Not yet implemented
+
+  local small = {}
+  small["models/props_c17/chair02a.mdl"] = true
+  small["models/props_junk/garbage_metalcan001a.mdl"] = true
+  small["models/props_junk/garbage_metalcan002a.mdl"] = true
+  small["models/props_junk/garbage_plasticbottle001a.mdl"] = true
+  small["models/props_junk/garbage_plasticbottle003a.mdl"] = true
+  small["models/props_junk/metal_paintcan001b.mdl"] = true
+  small["models/props_junk/popcan01a.mdl"] = true
+  small["models/props_junk/shoe001a.mdl"] = true
+  small["models/props_wasteland/cafeteria_table001a.mdl"] = true
+  small["models/props_wasteland/controlroom_chair001a.mdl"] = true
+  small["models/props/cs_office/trash_can_p7.mdl"] = true
+  small["models/props/cs_office/trash_can_p8.mdl"] = true
+  small["models/props/cs_office/water_bottle.mdl"] = true
+
+  smallDir = {}
+  smallDir["models/humans/"] = true
+  smallDir["models/gibs/"] = true
+
+  for _, v in ipairs(ents.GetAll()) do
+    if v:GetClass() == "prop_physics" then
+      if small[v:GetModel()] then
+        RemoveEffect(v)
+        result = result + 1
+      end
+      for d, _ in pairs(smallDir) do
+        if string.StartsWith(v:GetModel(), d) then
+          RemoveEffect(v)
+          result = result + 1
+        end
+      end
+    end
+  end
 
   return result
 end

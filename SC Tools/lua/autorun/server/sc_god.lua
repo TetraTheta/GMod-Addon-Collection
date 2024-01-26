@@ -60,7 +60,7 @@ end
 local function ProcessDamage(victim, dmg)
   if not IsValid(victim) then return true end
   -- Set damage to 0 for 'important' entity
-  if IsValid(victim.important) and victim.important == true then
+  if victim.important == true then
     dmg:SetDamage(0)
     MsgN("[SC God NPC] Target (", victim:GetName(), ", ", victim:GetClass(), ") is marked as important. Ignoring damage...")
 

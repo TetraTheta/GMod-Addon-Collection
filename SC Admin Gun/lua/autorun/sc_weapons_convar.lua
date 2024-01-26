@@ -1,7 +1,7 @@
 -- Hacky way to define ConVar early
 if not ConVarExists("sc_adminpistol_default") then
   local flags = {FCVAR_ARCHIVE, FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_NOTIFY}
-  CreateConVar("sc_adminpistol_default", "0", flags, "Default secondary fire mode of SC Admin Pistol", 0, 3)
+  CreateConVar("sc_adminpistol_default", "0", flags, "Default secondary fire mode of SC Admin Pistol", 0, 4)
 end
 
 --

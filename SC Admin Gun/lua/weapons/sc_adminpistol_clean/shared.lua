@@ -54,10 +54,10 @@ SWEP.Secondary.Airboat.Sound = "Airboat.FireGunRevDown" -- Sound for airboat gun
 SWEP.Secondary.Airboat.Spread = 0.2 -- Spread of airboat gun
 -- SWEP Secondary Fire Mode 2 (Combine Ball)
 SWEP.Secondary.CombineBall = {}
+SWEP.Secondary.CombineBall.Delay = 0.5
 SWEP.Secondary.CombineBall.Sound1 = "Weapon_AR2.Double"
 SWEP.Secondary.CombineBall.Sound2 = "weapons/physcannon/energy_bounce1.wav" -- This doesn't have corresponding soundscript!
 SWEP.Secondary.CombineBall.Speed = 5000
-SWEP.Secondary.CombineBall.Delay = 0.5
 SWEP.Secondary.CombineBall.Time = 5
 -- SWEP Secondary Fire Mode 3 (Armed Grenade)
 SWEP.Secondary.Grenade = {}
@@ -65,6 +65,11 @@ SWEP.Secondary.Grenade.Delay = 0.25
 SWEP.Secondary.Grenade.Force = 1000 -- This is default value of 'player_throwforce'
 SWEP.Secondary.Grenade.Sound = "weapons/grenade/tick1.wav"
 SWEP.Secondary.Grenade.Time = 3
+-- SWEP Secondary Fire Mode 4 (RPG Rocket)
+SWEP.Secondary.RPGRocket = {}
+SWEP.Secondary.RPGRocket.Delay = 0.15
+SWEP.Secondary.RPGRocket.Sound = "Weapon_RPG.Single"
+SWEP.Secondary.RPGRocket.Speed = 5000
 -- Precache models in case HL2 Pistol is not cached
 util.PrecacheModel(SWEP.ViewModel)
 util.PrecacheModel(SWEP.WorldModel)
@@ -158,6 +163,8 @@ function SWEP:SecondaryAttack()
     self:SecondaryAttackCombineBall()
   elseif mode == 3 then
     self:SecondaryAttackGrenade()
+  elseif mode == 4 then
+    self:SecondaryAttackRPGRocket()
   end
 end
 
@@ -316,13 +323,48 @@ function SWEP:SecondaryAttackGrenade()
   self:SetNextSecondaryFire(CurTime() + self.Secondary.Grenade.Delay)
 end
 
+-- RPG Rocket
+-- https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/shared/hl2mp/weapon_rpg.cpp
+function SWEP:SecondaryAttackRPGRocket()
+  if SERVER then
+    local round = ents.Create("rpg_missile")
+    round:SetPos(self:GetOwner():GetShootPos())
+    round:SetOwner(self:GetOwner())
+    round:SetAngles(self:GetOwner():GetAimVector():Angle())
+    round:SetSolidFlags(FSOLID_NOT_SOLID)
+    round:Spawn()
+    round:SetSaveValue("m_flLastHomingSpeed", 5000)
+    round:SetSaveValue("m_flGracePeriodEndsAt", CurTime())
+    -- round:SetAbsVelocity(self:GetOwner():GetAimVector() * 500)
+    round:SetVelocity(self:GetOwner():GetAimVector() * 5000)
+    timer.Simple(1, function()
+      if IsValid(round) then
+        round:SetSolidFlags(0)
+      end
+    end)
+  end
+
+  self:ShootEffects()
+  EmitSound(Sound(self.Secondary.RPGRocket.Sound), self:GetOwner():GetPos(), self:EntIndex(), CHAN_WEAPON, self.Secondary.Volume)
+  -- Recoil (Player)
+  --if not self:GetOwner():IsNPC() and not self:GetOwner():IsNextBot() then
+  if self:GetOwner():IsPlayer() then
+    local r1 = self.Secondary.Recoil * -1
+    local r2 = self.Secondary.Recoil * math.random(-1, 1)
+    self:GetOwner():ViewPunch(Angle(r1, r2, r1))
+  end
+
+  self:SetNextPrimaryFire(CurTime() + (self.Secondary.RPGRocket.Delay / 2))
+  self:SetNextSecondaryFire(CurTime() + self.Secondary.RPGRocket.Delay)
+end
+
 --
 -- Reload
 --
 function SWEP:Reload()
   if not IsFirstTimePredicted() or not self:GetOwner():KeyPressed(IN_RELOAD) or self:GetNextPrimaryFire() > CurTime() then return end
   local val = self.Secondary.Mode + 1
-  if val > 3 or val < 0 then
+  if val > 4 or val < 0 then
     val = 0
   end
 
