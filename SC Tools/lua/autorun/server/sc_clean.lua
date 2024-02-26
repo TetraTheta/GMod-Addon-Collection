@@ -107,19 +107,20 @@ local function CleanSmall()
   local result = 0
 
   local small = {}
+  small["models/props/cs_office/trash_can_p7.mdl"] = true
+  small["models/props/cs_office/trash_can_p8.mdl"] = true
+  small["models/props/cs_office/water_bottle.mdl"] = true
   small["models/props_c17/chair02a.mdl"] = true
   small["models/props_junk/garbage_metalcan001a.mdl"] = true
   small["models/props_junk/garbage_metalcan002a.mdl"] = true
   small["models/props_junk/garbage_plasticbottle001a.mdl"] = true
   small["models/props_junk/garbage_plasticbottle003a.mdl"] = true
+  small["models/props_junk/metal_paintcan001a.mdl"] = true
   small["models/props_junk/metal_paintcan001b.mdl"] = true
   small["models/props_junk/popcan01a.mdl"] = true
   small["models/props_junk/shoe001a.mdl"] = true
   small["models/props_wasteland/cafeteria_table001a.mdl"] = true
   small["models/props_wasteland/controlroom_chair001a.mdl"] = true
-  small["models/props/cs_office/trash_can_p7.mdl"] = true
-  small["models/props/cs_office/trash_can_p8.mdl"] = true
-  small["models/props/cs_office/water_bottle.mdl"] = true
 
   smallDir = {}
   smallDir["models/humans/"] = true
