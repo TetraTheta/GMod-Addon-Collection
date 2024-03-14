@@ -31,7 +31,6 @@ local function CleanAmmo()
       result = result + 1
     end
   end
-
   return result
 end
 
@@ -43,7 +42,6 @@ local function CleanDebris()
       result = result + 1
     end
   end
-
   return result
 end
 
@@ -61,7 +59,6 @@ local function CleanGibs()
       result = result + 1
     end
   end
-
   return result
 end
 
@@ -74,7 +71,6 @@ local function CleanPowerups()
       result = result + 1
     end
   end
-
   return result
 end
 
@@ -92,21 +88,19 @@ local function CleanRagdoll()
   local maxCountConVar = GetConVar("g_ragdoll_maxcount"):GetInt()
   local maxCount = (isnumber(maxCountConVar) and (maxCountConVar > 0)) and maxCountConVar or 32
   RunConsoleCommand("g_ragdoll_maxcount", "0")
-  timer.Simple(
-    1,
-    function()
-      RunConsoleCommand("g_ragdoll_maxcount", tostring(maxCount))
-    end
-  )
+  timer.Simple(1, function() RunConsoleCommand("g_ragdoll_maxcount", tostring(maxCount)) end)
   -- TODO: Client-sided ragdoll
-
   return result
 end
 
 local function CleanSmall()
   local result = 0
-
   local small = {}
+  small["models/props/cs_office/trash_can_p1.mdl"] = true
+  small["models/props/cs_office/trash_can_p2.mdl"] = true
+  small["models/props/cs_office/trash_can_p3.mdl"] = true
+  small["models/props/cs_office/trash_can_p4.mdl"] = true
+  small["models/props/cs_office/trash_can_p5.mdl"] = true
   small["models/props/cs_office/trash_can_p7.mdl"] = true
   small["models/props/cs_office/trash_can_p8.mdl"] = true
   small["models/props/cs_office/water_bottle.mdl"] = true
@@ -121,17 +115,16 @@ local function CleanSmall()
   small["models/props_junk/shoe001a.mdl"] = true
   small["models/props_wasteland/cafeteria_table001a.mdl"] = true
   small["models/props_wasteland/controlroom_chair001a.mdl"] = true
-
   smallDir = {}
   smallDir["models/humans/"] = true
   smallDir["models/gibs/"] = true
-
   for _, v in ipairs(ents.GetAll()) do
     if v:GetClass() == "prop_physics" then
       if small[v:GetModel()] then
         RemoveEffect(v)
         result = result + 1
       end
+
       for d, _ in pairs(smallDir) do
         if string.StartsWith(v:GetModel(), d) then
           RemoveEffect(v)
@@ -140,7 +133,6 @@ local function CleanSmall()
       end
     end
   end
-
   return result
 end
 
@@ -168,13 +160,13 @@ local function CleanWeapon()
       result = result + 1
     end
   end
-
   return result
 end
 
 local function CleanAutoComplete(cmd, args)
   astr = string.Trim(args:lower())
   local tbl = {}
+
   -- No argument
   if astr == nil or astr == "" then
     table.insert(tbl, "sc_clean all")
@@ -186,12 +178,11 @@ local function CleanAutoComplete(cmd, args)
     table.insert(tbl, "sc_clean ragdoll")
     table.insert(tbl, "sc_clean small")
     table.insert(tbl, "sc_clean weapon")
-
     return tbl
   end
 
   -- One argument
-  if string.StartsWith(astr, "a") then
+  if astr:StartsWith("a") then
     table.insert(tbl, "sc_clean all")
     table.insert(tbl, "sc_clean ammo")
   elseif string.StartsWith(astr, "d") then
@@ -219,7 +210,6 @@ local function CleanAutoComplete(cmd, args)
     table.insert(tbl, "sc_clean small")
     table.insert(tbl, "sc_clean weapon")
   end
-
   return tbl
 end
 
@@ -240,8 +230,7 @@ local function Clean(ply, cmd, args, str)
   }
 
   if not validArgs[arg] then
-    SendMessage(ply, HUD_PRINTCONSOLE, "[SC Clean] You must specify one of these argument (all|ammo|debris|decal|gibs|powerups|ragdoll|small|weapon). Aborting...")
-
+    SendMessage(ply, HUD_PRINTCONSOLE, "[SC Clean] You must specify one of these argument: all, ammo, debris, decal, gibs, powerups, ragdoll, small, weapon. Aborting...")
     return
   end
 
@@ -249,16 +238,12 @@ local function Clean(ply, cmd, args, str)
   local resTable = {}
   if arg == "all" or arg == "ammo" then
     local resAmmo = CleanAmmo()
-    if resAmmo > 0 then
-      resTable.ammo = resAmmo
-    end
+    if resAmmo > 0 then resTable.ammo = resAmmo end
   end
 
   if arg == "all" or arg == "debris" then
     local resDebris = CleanDebris()
-    if resDebris > 0 then
-      resTable.debris = resDebris
-    end
+    if resDebris > 0 then resTable.debris = resDebris end
   end
 
   if arg == "all" or arg == "decal" then
@@ -268,37 +253,27 @@ local function Clean(ply, cmd, args, str)
 
   if arg == "all" or arg == "gibs" then
     local resGibs = CleanGibs()
-    if resGibs > 0 then
-      resTable.gibs = resGibs
-    end
+    if resGibs > 0 then resTable.gibs = resGibs end
   end
 
   if arg == "all" or arg == "powerups" then
     local resPowerups = CleanPowerups()
-    if resPowerups > 0 then
-      resTable.powerups = resPowerups
-    end
+    if resPowerups > 0 then resTable.powerups = resPowerups end
   end
 
   if arg == "all" or arg == "ragdoll" then
     local resRagdoll = CleanRagdoll()
-    if resRagdoll > 0 then
-      resTable.ragdoll = resRagdoll
-    end
+    if resRagdoll > 0 then resTable.ragdoll = resRagdoll end
   end
 
   if arg == "all" or arg == "small" then
     local resSmall = CleanSmall()
-    if resSmall > 0 then
-      resTable.small = resSmall
-    end
+    if resSmall > 0 then resTable.small = resSmall end
   end
 
   if arg == "all" or arg == "weapon" then
     local resWeapon = CleanWeapon()
-    if resWeapon > 0 then
-      resTable.weapon = resWeapon
-    end
+    if resWeapon > 0 then resTable.weapon = resWeapon end
   end
 
   -- Convert table to Compressed JSON

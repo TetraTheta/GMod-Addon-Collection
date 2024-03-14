@@ -10,7 +10,6 @@ function sc_clean_panel(c)
   c:Button("Ragdolls", "sc_clean", "ragdoll")
   c:Button("Small Objects", "sc_clean", "small")
   c:Button("Weapons", "sc_clean", "weapons")
-
   return c
 end
 
@@ -27,7 +26,6 @@ function sc_setspeed_global_panel(c)
   c:Button("Slow Reset", "sc_setspeed", "all", "slow", "reset")
   c:Button("Walk Fast", "sc_setspeed", "all", "walk", "fast")
   c:Button("Walk Reset", "sc_setspeed", "all", "walk", "reset")
-
   return c
 end
 
@@ -51,7 +49,6 @@ function sc_setspeed_player_panel(c)
   c:Button("Slow Reset", "sc_setspeed", sel, "slow", "reset")
   c:Button("Walk Fast", "sc_setspeed", sel, "walk", "fast")
   c:Button("Walk Reset", "sc_setspeed", sel, "walk", "reset")
-
   return c
 end
 
@@ -79,25 +76,14 @@ function sc_setting_panel(c)
   c:Help("Entity remove effect type.\n0 = Remove (Remover tool gun effect), 1 = Dissolve")
   c:NumSlider("sc_remove_effect", "sc_remove_effect", 0, 1, 0)
   c:Help("--------------------")
-
   return c
 end
 
-hook.Add(
-  "PopulateToolMenu",
-  "sc_tools",
-  function()
-    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_settings", "Settings", "", "", sc_setting_panel, {})
-    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_clean", "Clean", "", "", sc_clean_panel, {})
-    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_global", "Set Speed", "", "", sc_setspeed_global_panel, {})
-    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
-  end
-)
+hook.Add("PopulateToolMenu", "sc_tools", function()
+  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_settings", "Settings", "", "", sc_setting_panel, {})
+  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_clean", "Clean", "", "", sc_clean_panel, {})
+  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_global", "Set Speed", "", "", sc_setspeed_global_panel, {})
+  spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
+end)
 
-hook.Add(
-  "SpawnMenuOpened",
-  "sc_tools",
-  function()
-    spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {})
-  end
-)
+hook.Add("SpawnMenuOpened", "sc_tools", function() spawnmenu.AddToolMenuOption("Utilities", "SC Tools", "sc_tools_setspeed_player", "Set Speed (Player)", "", "", sc_setspeed_player_panel, {}) end)

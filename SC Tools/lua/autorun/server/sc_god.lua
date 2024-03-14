@@ -1,6 +1,6 @@
 --[[
   Commands:
-  * sc_god [player] - Keep the given player god mode (useful in maps that consistently remove god mode from players).
+  * sc_god <player> - Keep the given player god mode (useful in maps that consistently remove god mode from players).
   * sc_set_god - Set the NPC you're looking at to be invulnerable.
   * sc_unset_god - Set the NPC you're looking at not to be vulnerable.
 
@@ -40,20 +40,18 @@ local npc_list = {
 
 local function FilterMap(map)
   for _, prefix in ipairs(map_prefix) do
-    if string.StartWith(map, prefix) then return true end
+    if map:StartWith(prefix) then return true end
   end
-
   return false
 end
 
 local function FilterNPC(victim)
   local class = victim:GetClass()
-  if HasValue(npc_list, class) then
+  if table.HasValue(npc_list, class) then
     return true
   elseif class == "npc_citizen" then
     if victim:GetInternalVariable("citizentype") == 4 and victim:GetModel() == "models/odessa.mdl" then return true end
   end
-
   return false
 end
 
@@ -63,7 +61,6 @@ local function ProcessDamage(victim, dmg)
   if victim.important == true then
     dmg:SetDamage(0)
     MsgN("[SC God NPC] Target (", victim:GetName(), ", ", victim:GetClass(), ") is marked as important. Ignoring damage...")
-
     return true
   end
 
@@ -75,12 +72,10 @@ local function ProcessDamage(victim, dmg)
       -- If 'sc_ignore_important' is set, just make the NPC killable
       victim:SetKeyValue("GameEndAlly", 0)
       victim:ClearAllOutputs()
-
       return false
     else
       dmg:SetDamage(0)
       MsgN("[SC Auto God NPC] Automatic God Mode is activated to the NPC (", victim:GetName(), ", ", victim:GetClass(), "). Ignoring damage...")
-
       return true
     end
   end
@@ -89,7 +84,7 @@ end
 local function SetGodNPC(ply, cmd, args, str)
   if not CheckSAdmin(ply) then return end
   local ent = GetTraceEntity(ply)
-  if ent.IsNPC() or ent.IsNextBot() then
+  if ent:IsNPC() or ent:IsNextBot() then
     ent.important = true
     MsgN("[SC God NPC] The NPC (", ent:GetName(), ", ", ent:GetClass(), ") is set as important.")
   end
@@ -97,12 +92,9 @@ end
 
 local function SetGodPlayer(ply, cmd, args, str)
   if not CheckSAdminConsole(ply) then return end
-  if args[0] ~= nil then
-    if args[1] ~= nil then
-      SendMessage(ply, HUD_PRINTCONSOLE, "[SC God Player] Only first player will be processed.")
-    end
-
-    local p = GetPlayerByName(args[0])
+  if args[1] ~= nil then
+    if args[2] ~= nil then SendMessage(ply, HUD_PRINTCONSOLE, "[SC God Player] Only first player will be processed.") end
+    local p = GetPlayerByName(args[1])
     if IsValid(p) and p:IsPlayer() then
       -- Attempt 1: Set 'important' to the player
       p.important = true
@@ -116,27 +108,7 @@ local function SetGodPlayer(ply, cmd, args, str)
 end
 
 local function SetGodPlayerAutoComplete(cmd, args)
-  -- Check cmd first
-  if string.lower(cmd) ~= "sc_god" then return {} end
-  args = string.lower(args)
-  local suggestions = {}
-  -- Check for players whose name starts with the given input
-  for _, hPlayer in ipairs(player.GetHumans()) do
-    local lowerName = string.lower(hPlayer:GetName())
-    if string.StartsWith(lowerName, args) then
-      table.insert(suggestions, cmd .. " " .. hPlayer:GetName())
-    end
-  end
-
-  -- Check for players whose name contains the given input
-  for _, hPlayer in ipairs(player.GetHumans()) do
-    local lowerName = string.lower(hPlayer:GetName())
-    if string.find(lowerName, args, 1, true) and not table.HasValue(suggestions, cmd .. " " .. hPlayer:GetName()) then
-      table.insert(suggestions, cmd .. " " .. hPlayer:GetName())
-    end
-  end
-
-  return suggestions
+  return SuggestPlayer("sc_god", cmd, args)
 end
 
 local function SetGodSAdmin(ply)
