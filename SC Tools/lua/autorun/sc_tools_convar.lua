@@ -25,6 +25,11 @@ if not ConVarExists(scFlashlightAuto) then CreateConVar(scFlashlightAuto, "0", f
 local scIgnoreImportant = "sc_ignore_important"
 if not ConVarExists(scIgnoreImportant) then CreateConVar(scIgnoreImportant, "0", flags, "Ignore 'important' flag of NPC", 0, 1) end
 --
+-- sc_no_obstacle <0|1> - Disable collision check for obstacle objects
+--
+local scNoObstacle = "sc_no_obstacle"
+if not ConVarExists(scNoObstacle) then CreateConVar(scNoObstacle, "0", flags, "Disable collision check for obstacle objects", 0, 1) end
+--
 -- sc_no_player_collision <0|1> - Disable player-to-player collision.
 --
 local scNoPlayerCollision = "sc_no_player_collision"
@@ -38,24 +43,24 @@ if not ConVarExists(scRemoveEffect) then CreateConVar(scRemoveEffect, "0", flags
 -- ConVar Change
 --
 if SERVER then
-  net.Receive("sc_convar_change", sc_convar_change)
-  function sc_convar_change(len, ply)
+  net.Receive("sc_convar_change", SCConVarChange)
+  function SCConVarChange(len, ply)
     if not (IsValid(ply) and ply:IsPlayer() and ply:IsSuperAdmin()) then return end
     local cmd = net.ReadString()
     if cmd == scAutoGodNPC then
-      RunConsoleCommand(scAutoGodNPC, net.ReadInt())
+      RunConsoleCommand(scAutoGodNPC, net.ReadInt(2))
     elseif cmd == scAutoGodSAdmin then
-      RunConsoleCommand(scAutoGodSAdmin, net.ReadInt())
+      RunConsoleCommand(scAutoGodSAdmin, net.ReadInt(2))
     elseif cmd == scConnectionMessage then
-      RunConsoleCommand(scConnectionMessage, net.ReadInt())
+      RunConsoleCommand(scConnectionMessage, net.ReadInt(2))
     elseif cmd == scFlashlightAuto then
-      RunConsoleCommand(scFlashlightAuto, net.ReadInt())
+      RunConsoleCommand(scFlashlightAuto, net.ReadInt(2))
     elseif cmd == scIgnoreImportant then
-      RunConsoleCommand(scIgnoreImportant, net.ReadInt())
+      RunConsoleCommand(scIgnoreImportant, net.ReadInt(2))
     elseif cmd == scNoPlayerCollision then
-      RunConsoleCommand(scNoPlayerCollision, net.ReadInt())
+      RunConsoleCommand(scNoPlayerCollision, net.ReadInt(2))
     elseif cmd == scRemoveEffect then
-      RunConsoleCommand(scRemoveEffect, net.ReadInt())
+      RunConsoleCommand(scRemoveEffect, net.ReadInt(2))
     end
   end
 end

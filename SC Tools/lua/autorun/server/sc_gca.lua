@@ -3,7 +3,7 @@
   * sc_gca [player] - Refill the ammo of the weapon that the given player is holding.
 --]]
 util.AddNetworkString("SCGCA")
-local function GiveCurrentAmmo(ply, cmd, args, str)
+local function GiveCurrentAmmo(ply, _, args, _)
   if not CheckSAdmin(ply) then return end
   local p
   if args[1] ~= nil then

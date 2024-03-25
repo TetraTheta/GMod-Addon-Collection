@@ -95,38 +95,15 @@ end
 
 local function CleanSmall()
   local result = 0
-  local small = {}
-  small["models/props/cs_office/trash_can_p1.mdl"] = true
-  small["models/props/cs_office/trash_can_p2.mdl"] = true
-  small["models/props/cs_office/trash_can_p3.mdl"] = true
-  small["models/props/cs_office/trash_can_p4.mdl"] = true
-  small["models/props/cs_office/trash_can_p5.mdl"] = true
-  small["models/props/cs_office/trash_can_p7.mdl"] = true
-  small["models/props/cs_office/trash_can_p8.mdl"] = true
-  small["models/props/cs_office/water_bottle.mdl"] = true
-  small["models/props_c17/chair02a.mdl"] = true
-  small["models/props_junk/garbage_metalcan001a.mdl"] = true
-  small["models/props_junk/garbage_metalcan002a.mdl"] = true
-  small["models/props_junk/garbage_plasticbottle001a.mdl"] = true
-  small["models/props_junk/garbage_plasticbottle003a.mdl"] = true
-  small["models/props_junk/metal_paintcan001a.mdl"] = true
-  small["models/props_junk/metal_paintcan001b.mdl"] = true
-  small["models/props_junk/popcan01a.mdl"] = true
-  small["models/props_junk/shoe001a.mdl"] = true
-  small["models/props_wasteland/cafeteria_table001a.mdl"] = true
-  small["models/props_wasteland/controlroom_chair001a.mdl"] = true
-  smallDir = {}
-  smallDir["models/humans/"] = true
-  smallDir["models/gibs/"] = true
   for _, v in ipairs(ents.GetAll()) do
     if v:GetClass() == "prop_physics" then
-      if small[v:GetModel()] then
+      if SC_SMALL_MODELS[v:GetModel()] and v:GetName() == "" then
         RemoveEffect(v)
         result = result + 1
       end
 
-      for d, _ in pairs(smallDir) do
-        if string.StartsWith(v:GetModel(), d) then
+      for d, _ in pairs(SC_SMALL_MODELS_DIRS) do
+        if string.StartsWith(v:GetModel(), d) and v:GetName() == "" then
           RemoveEffect(v)
           result = result + 1
         end
@@ -163,10 +140,9 @@ local function CleanWeapon()
   return result
 end
 
-local function CleanAutoComplete(cmd, args)
-  astr = string.Trim(args:lower())
+local function CleanAutoComplete(_, args)
+  local astr = string.Trim(args:lower())
   local tbl = {}
-
   -- No argument
   if astr == nil or astr == "" then
     table.insert(tbl, "sc_clean all")
@@ -213,7 +189,7 @@ local function CleanAutoComplete(cmd, args)
   return tbl
 end
 
-local function Clean(ply, cmd, args, str)
+local function Clean(ply, _, args, _)
   if not CheckSAdminConsole(ply) then return end
   -- Filter wrong arguments
   local arg = string.lower(args[1])

@@ -5,7 +5,7 @@
   ConVars:
   * sc_flashlight_auto <0|1|2> - Automatically enable flashlight to players. 0 = Disable, 1 = Super Admin Only, 2 = All Players.
 --]]
-local function AllowFlashlightAutomatic(ply)
+local function AllowFlashlightAutomatic(_)
   local cv = GetConVar("sc_flashlight_auto"):GetInt()
   if not isnumber(cv) then return end
   if cv == 1 then
@@ -34,7 +34,7 @@ local function AllowFlashlight(ply, cmd, args, str)
   if args[1] ~= nil then
     if args[2] ~= nil then SendMessage(ply, HUD_PRINTCONSOLE, "[SC Flashlight] Only first player will be processed.") end
     local p = GetPlayerByName(args[1])
-    if IsValid(p) and p:IsPlayer() then
+    if p ~= nil and IsValid(p) and p:IsPlayer() then
       p:AllowFlashlight(true)
       SendMessage(ply, HUD_PRINTTALK, "[SC Flashlight] Flashlight is enabled to " .. p:GetName() .. ".")
     end

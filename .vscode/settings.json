@@ -1,0 +1,5 @@
+{
+  "code-runner.customCommand": "cmd /C \"C:/Program Files/Git/bin/sh.exe\" \"$workspaceRoot/build.sh\"",
+  "code-runner.preserveFocus": false,
+  "code-runner.runInTerminal": true,
+}

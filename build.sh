@@ -1,6 +1,7 @@
 #!/bin/bash
 gmad="E:/Program Files/Steam/steamapps/common/GarrysMod/bin/gmad.exe"
 dest="E:/Program Files/Steam/steamapps/common/GarrysMod/garrysmod/addons/test"
+rm -rf ".build"
 mkdir -p ".build"
 mkdir -p "$dest"
 #"$gmad" create -folder "Decrease Sound" -out ".build/decrease_sound.gma"; cp -fv ".build/decrease_sound.gma" "$dest" 2>/dev/null

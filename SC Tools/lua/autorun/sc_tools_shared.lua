@@ -4,12 +4,59 @@
   If I declare local function/variable here, it won't be detected in other files even if this file is included via 'include()'.
   Declare this file as module, or define function/variable as global to use them in other files.
 ]]
+--
+include("autorun/sc_tools_config.lua")
+--
+---Check if given player is SuperAdmin
+---@param target Player Player to check for SuperAdmin
+---@return boolean result true if the player is SuerAdmin
 function CheckSAdmin(target)
   return IsValid(target) and target:IsPlayer() and target:IsUserGroup("superadmin")
 end
 
+---Check if given entity is Console or SuperAdmin
+---@param target Entity Entity to check for Console or SuperAdmin
+---@return boolean result true if the entity is either Console or SuperAdmin
 function CheckSAdminConsole(target)
+  ---@diagnostic disable-next-line: param-type-mismatch
   return target == NULL or CheckSAdmin(target)
+end
+
+---Generate autocomplete table
+---@param command string The concommand this autocompletion is for. (Same from concommand.AutoComplete)
+---@param arguments string The arguments typed so far. (Same from concommand.AutoComplete)
+---@param suggestPlayer boolean Should suggest player at the end of the autocompletion?
+---@param ... table Subcommand of the command.
+---@return table table Autocomplete Table
+function GenerateAutoComplete(command, arguments, suggestPlayer, ...)
+  local vargs = {...}
+  local cmd = command:lower()
+  local args = arguments:lower():Trim():Split(" ")
+  if #args == 0 then
+    local tbl = {}
+    for _, v in ipairs(vargs[1]) do
+      table.insert(cmd .. " " .. v)
+    end
+    return tbl
+    -- else
+    --   for i = 1, #args do
+    --     for _, v in ipairs(vargs[i]) do
+    --       ---TODO finish this
+    --     end
+    --   end
+  end
+  return {}
+end
+
+function SuggestPlayer(target, cmd, args)
+  if string.lower(cmd) ~= string.lower(target) then return {} end
+  args = string.Trim(string.lower(args))
+  local suggestions = {}
+  for _, hPlayer in ipairs(player.GetHumans()) do
+    local lowerName = string.lower(hPlayer:GetName())
+    if string.find(lowerName, args) then table.insert(suggestions, cmd .. " \"" .. hPlayer:GetName() .. "\"") end
+  end
+  return suggestions
 end
 
 function GetPlayerByName(name)
@@ -17,7 +64,7 @@ function GetPlayerByName(name)
   if string.sub(name, 1, 1) == '"' and string.sub(name, -1) == '"' then
     rname = string.sub(name, 2, -2)
   else
-    rname = str
+    rname = name
   end
 
   for _, p in ipairs(player.GetHumans()) do
@@ -34,7 +81,7 @@ function GetTraceEntity(ply)
 end
 
 function HasValue(tbl, val)
-  for k, v in ipairs(tbl) do
+  for _, v in ipairs(tbl) do
     if v == val then return true end
   end
   return false
@@ -54,17 +101,6 @@ function SendMessage(target, msgtype, msg)
       target:PrintMessage(HUD_PRINTTALK, msg)
     end
   end
-end
-
-function SuggestPlayer(target, cmd, args)
-  if string.lower(cmd) ~= string.lower(target) then return {} end
-  args = string.Trim(string.lower(args))
-  local suggestions = {}
-  for _, hPlayer in ipairs(player.GetHumans()) do
-    local lowerName = string.lower(hPlayer:GetName())
-    if string.find(lowerName, args) then table.insert(suggestions, cmd .. " \"" .. hPlayer:GetName() .. "\"") end
-  end
-  return suggestions
 end
 
 function RemoveEffect(ent)
@@ -88,8 +124,8 @@ function RemoveEffectDissolve(ent)
     dissolver:SetPos(ent:GetPos())
     dissolver:Spawn()
     dissolver:Activate()
-    dissolver:SetKeyValue("magnitude", 100)
-    dissolver:SetKeyValue("dissolvetype", 0)
+    dissolver:SetKeyValue("magnitude", "100")
+    dissolver:SetKeyValue("dissolvetype", "0")
   end
 
   dissolver:Fire("Dissolve", "sc_dissolve_" .. dissolveCounter)

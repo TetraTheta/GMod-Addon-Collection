@@ -5,7 +5,7 @@
 ]]
 --
 include("autorun/sc_tools_shared.lua")
-local function Heal(ply, cmd, args, str)
+local function Heal(ply, _, args, _)
   if not CheckSAdmin(ply) then return end
   local p
   if args[1] ~= nil then
@@ -25,7 +25,7 @@ local function HealAutoComplete(cmd, args)
   return SuggestPlayer("sc_heal", cmd, args)
 end
 
-local function OverHeal(ply, cmd, args, str)
+local function OverHeal(ply, _, args, _)
   if not CheckSAdmin(ply) then return end
   local p
   if args[1] ~= nil then

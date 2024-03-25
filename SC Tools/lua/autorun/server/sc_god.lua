@@ -81,7 +81,7 @@ local function ProcessDamage(victim, dmg)
   end
 end
 
-local function SetGodNPC(ply, cmd, args, str)
+local function SetGodNPC(ply, _, _, _)
   if not CheckSAdmin(ply) then return end
   local ent = GetTraceEntity(ply)
   if ent:IsNPC() or ent:IsNextBot() then
@@ -90,12 +90,12 @@ local function SetGodNPC(ply, cmd, args, str)
   end
 end
 
-local function SetGodPlayer(ply, cmd, args, str)
+local function SetGodPlayer(ply, _, args, _)
   if not CheckSAdminConsole(ply) then return end
   if args[1] ~= nil then
     if args[2] ~= nil then SendMessage(ply, HUD_PRINTCONSOLE, "[SC God Player] Only first player will be processed.") end
     local p = GetPlayerByName(args[1])
-    if IsValid(p) and p:IsPlayer() then
+    if p ~= nil and IsValid(p) and p:IsPlayer() then
       -- Attempt 1: Set 'important' to the player
       p.important = true
       -- Attempt 2: Set God Mode to the player
@@ -120,7 +120,7 @@ local function SetGodSAdmin(ply)
   end
 end
 
-local function UnsetGodNPC(ply, cmd, args, str)
+local function UnsetGodNPC(ply, _, _, _)
   if not CheckSAdmin(ply) then return end
   local ent = GetTraceEntity(ply)
   if ent.IsNPC() or ent.IsNextBot() then
