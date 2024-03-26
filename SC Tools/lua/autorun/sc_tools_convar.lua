@@ -44,7 +44,7 @@ if not ConVarExists(scRemoveEffect) then CreateConVar(scRemoveEffect, "0", flags
 --
 if SERVER then
   net.Receive("sc_convar_change", SCConVarChange)
-  function SCConVarChange(len, ply)
+  function SCConVarChange(_, ply)
     if not (IsValid(ply) and ply:IsPlayer() and ply:IsSuperAdmin()) then return end
     local cmd = net.ReadString()
     if cmd == scAutoGodNPC then

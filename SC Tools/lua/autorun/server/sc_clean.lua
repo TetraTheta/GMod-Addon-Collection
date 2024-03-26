@@ -10,19 +10,19 @@ util.AddNetworkString("SCCleanResult")
 local function CleanAmmo()
   local clean = {}
   local result = 0
-  clean.item_ammo_357 = true
-  clean.item_ammo_357_large = true
-  clean.item_ammo_ar2 = true
-  clean.item_ammo_ar2_altfire = true
-  clean.item_ammo_ar2_large = true
-  clean.item_ammo_crossbow = true
-  clean.item_ammo_pistol = true
-  clean.item_ammo_pistol_large = true
-  clean.item_ammo_smg1 = true
-  clean.item_ammo_smg1_grenade = true
-  clean.item_ammo_smg1_large = true
-  clean.item_box_buckshot = true
-  clean.item_rpg_round = true
+  clean["item_ammo_357"] = true
+  clean["item_ammo_357_large"] = true
+  clean["item_ammo_ar2"] = true
+  clean["item_ammo_ar2_altfire"] = true
+  clean["item_ammo_ar2_large"] = true
+  clean["item_ammo_crossbow"] = true
+  clean["item_ammo_pistol"] = true
+  clean["item_ammo_pistol_large"] = true
+  clean["item_ammo_smg1"] = true
+  clean["item_ammo_smg1_grenade"] = true
+  clean["item_ammo_smg1_large"] = true
+  clean["item_box_buckshot"] = true
+  clean["item_rpg_round"] = true
   for _, v in ipairs(ents.GetAll()) do
     if not IsValid(v:GetPhysicsObject()) then continue end
     local c = v:GetClass()
@@ -116,19 +116,19 @@ end
 local function CleanWeapon()
   local clean = {}
   local result = 0
-  clean.grenade_ar2 = true
-  clean.weapon_357 = true
-  clean.weapon_ar2 = true
-  clean.weapon_bugbait = true
-  clean.weapon_crossbow = true
-  clean.weapon_crowbar = true
-  clean.weapon_frag = true
-  clean.weapon_pistol = true
-  clean.weapon_rpg = true
-  clean.weapon_shotgun = true
-  clean.weapon_slam = true
-  clean.weapon_smg1 = true
-  clean.weapon_stunstick = true
+  clean["grenade_ar2"] = true
+  clean["weapon_357"] = true
+  clean["weapon_ar2"] = true
+  clean["weapon_bugbait"] = true
+  clean["weapon_crossbow"] = true
+  clean["weapon_crowbar"] = true
+  clean["weapon_frag"] = true
+  clean["weapon_pistol"] = true
+  clean["weapon_rpg"] = true
+  clean["weapon_shotgun"] = true
+  clean["weapon_slam"] = true
+  clean["weapon_smg1"] = true
+  clean["weapon_stunstick"] = true
   for _, v in ipairs(ents.GetAll()) do
     if not IsValid(v:GetPhysicsObject()) then continue end
     local c = v:GetClass()
@@ -193,17 +193,16 @@ local function Clean(ply, _, args, _)
   if not CheckSAdminConsole(ply) then return end
   -- Filter wrong arguments
   local arg = string.lower(args[1])
-  local validArgs = {
-    all = true,
-    ammo = true,
-    debris = true,
-    decal = true,
-    gibs = true,
-    powerups = true,
-    ragdoll = true,
-    small = true,
-    weapon = true
-  }
+  local validArgs = {}
+  validArgs["all"] = true
+  validArgs["ammo"] = true
+  validArgs["debris"] = true
+  validArgs["decal"] = true
+  validArgs["gibs"] = true
+  validArgs["powerups"] = true
+  validArgs["ragdoll"] = true
+  validArgs["small"] = true
+  validArgs["weapon"] = true
 
   if not validArgs[arg] then
     SendMessage(ply, HUD_PRINTCONSOLE, "[SC Clean] You must specify one of these argument: all, ammo, debris, decal, gibs, powerups, ragdoll, small, weapon. Aborting...")
