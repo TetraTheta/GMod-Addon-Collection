@@ -15,10 +15,10 @@ SWEP.Slot = 2
 SWEP.SlotPos = 0
 SWEP.Spawnable = true
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_scaw_mp5sd.mdl"
+SWEP.ViewModel = "models/weapons/c_scw_mp5sd.mdl"
 SWEP.Weight = 999
-SWEP.WepSelectIcon = CLIENT and surface.GetTextureID("weapons/scaw_mp5sd") or ""
-SWEP.WorldModel = "models/weapons/w_scaw_mp5sd.mdl"
+SWEP.WepSelectIcon = CLIENT and surface.GetTextureID("weapons/scw_mp5sd") or ""
+SWEP.WorldModel = "models/weapons/w_scw_mp5sd.mdl"
 SWEP.CFG_HoldType = "ar2"
 SWEP.CFG_ReloadSound = "SCW.MP5SD.Reload"
 -- SWEP Primary Fire
@@ -40,38 +40,11 @@ SWEP.Secondary.DefaultClip = 10
 SWEP.Secondary.CFG_Delay = 0.5
 SWEP.Secondary.CFG_Force = 1000
 SWEP.Secondary.CFG_Recoil = 0.1
-SWEP.Secondary.CFG_Sound = "SWC.MP5SD.Secondary"
+SWEP.Secondary.CFG_Sound = "SCW.MP5SD.Secondary"
 --
 util.PrecacheModel(SWEP.ViewModel)
 util.PrecacheModel(SWEP.WorldModel)
 --
-sound.Add({
-  name = "SCW.MP5SD.Primary",
-  channel = CHAN_WEAPON,
-  volume = 0.4,
-  level = SNDLVL_70dB,
-  pitch = {95, 105},
-  sound = ")weapons/scaw_mp5sd/fire.mp3"
-})
-
-sound.Add({
-  name = "SWC.MP5SD.Secondary",
-  channel = CHAN_WEAPON,
-  volume = 0.4,
-  level = SNDLVL_70dB,
-  pitch = 100,
-  sound = "weapons/grenade_launcher1.wav"
-})
-
-sound.Add({
-  name = "SCW.MP5SD.Reload",
-  channel = CHAN_WEAPON,
-  volume = 0.4,
-  level = SNDLVL_70dB,
-  pitch = {95, 105},
-  sound = ")weapons/scaw_mp5sd/reload.mp3"
-})
-
 --[[
 ########################
 #     SWEP UTILITY     #
